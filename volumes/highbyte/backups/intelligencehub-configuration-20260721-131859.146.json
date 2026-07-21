@@ -80,7 +80,16 @@
         "tags" : [ ],
         "attributes" : [ {
           "attributeType" : "Internal",
+          "name" : "AssetID",
+          "description" : "Unique Asset ID",
+          "nullable" : false,
+          "required" : false,
+          "array" : false,
+          "internalType" : "String"
+        }, {
+          "attributeType" : "Internal",
           "name" : "SolidFlow",
+          "description" : "Discharge Solid Mass Flow Rate (t/h)",
           "nullable" : false,
           "required" : false,
           "array" : false,
@@ -88,81 +97,14 @@
         }, {
           "attributeType" : "Internal",
           "name" : "BPL",
+          "description" : "Discharge Bone Phosphate of Lime (%)",
           "nullable" : false,
           "required" : false,
           "array" : false,
           "internalType" : "Real32"
-        }, {
-          "attributeType" : "Internal",
-          "name" : "P80",
-          "nullable" : false,
-          "required" : false,
-          "array" : false,
-          "internalType" : "Real32"
-        }, {
-          "attributeType" : "Internal",
-          "name" : "Timestamp",
-          "nullable" : false,
-          "required" : false,
-          "array" : false,
-          "internalType" : "String"
-        }, {
-          "attributeType" : "Internal",
-          "name" : "AssetID",
-          "nullable" : false,
-          "required" : false,
-          "array" : false,
-          "internalType" : "String"
         } ]
       } ],
-      "instances" : [ {
-        "name" : "BM_001",
-        "tags" : [ ],
-        "model" : "BallMill",
-        "rootValueAs" : "Object",
-        "template" : {
-          "type" : "Off"
-        },
-        "executeMode" : "V4",
-        "initExpression" : "",
-        "attributes" : [ {
-          "name" : "SolidFlow",
-          "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Ball Mill Discharge Solid Flow\"];"
-          }
-        }, {
-          "name" : "BPL",
-          "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Ball Mill Discharge BPL\"];"
-          }
-        }, {
-          "name" : "P80",
-          "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Ball Mill Discharge P80\"];\n"
-          }
-        }, {
-          "name" : "Timestamp",
-          "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Timestamp\"];"
-          }
-        }, {
-          "name" : "AssetID",
-          "expression" : {
-            "type" : "Reference",
-            "reference" : {
-              "type" : "Empty"
-            }
-          },
-          "defaultValue" : "BM_001"
-        } ],
-        "parameters" : {
-          "type" : "EmptyParameters"
-        }
-      } ]
+      "instances" : [ ]
     },
     "conditions" : [ ],
     "functions" : [ ],

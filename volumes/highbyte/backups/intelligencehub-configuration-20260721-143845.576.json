@@ -128,26 +128,34 @@
         "attributes" : [ {
           "name" : "SolidFlow",
           "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Ball Mill Discharge Solid Flow\"];"
+            "type" : "Reference",
+            "reference" : {
+              "type" : "Empty"
+            }
           }
         }, {
           "name" : "BPL",
           "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Ball Mill Discharge BPL\"];"
+            "type" : "Reference",
+            "reference" : {
+              "type" : "Empty"
+            }
           }
         }, {
           "name" : "P80",
           "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Ball Mill Discharge P80\"];\n"
+            "type" : "Reference",
+            "reference" : {
+              "type" : "Empty"
+            }
           }
         }, {
           "name" : "Timestamp",
           "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Timestamp\"];"
+            "type" : "Reference",
+            "reference" : {
+              "type" : "Empty"
+            }
           }
         }, {
           "name" : "AssetID",

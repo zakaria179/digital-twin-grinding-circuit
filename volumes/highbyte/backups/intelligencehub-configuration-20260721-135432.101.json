@@ -80,7 +80,16 @@
         "tags" : [ ],
         "attributes" : [ {
           "attributeType" : "Internal",
+          "name" : "AssetID",
+          "description" : "Unique Asset ID",
+          "nullable" : false,
+          "required" : false,
+          "array" : false,
+          "internalType" : "String"
+        }, {
+          "attributeType" : "Internal",
           "name" : "SolidFlow",
+          "description" : "Discharge Solid Mass Flow Rate (t/h)",
           "nullable" : false,
           "required" : false,
           "array" : false,
@@ -88,6 +97,7 @@
         }, {
           "attributeType" : "Internal",
           "name" : "BPL",
+          "description" : "Discharge Bone Phosphate of Lime (%)",
           "nullable" : false,
           "required" : false,
           "array" : false,
@@ -95,6 +105,7 @@
         }, {
           "attributeType" : "Internal",
           "name" : "P80",
+          "description" : "Discharge 80% Passing Size ( um )",
           "nullable" : false,
           "required" : false,
           "array" : false,
@@ -102,13 +113,7 @@
         }, {
           "attributeType" : "Internal",
           "name" : "Timestamp",
-          "nullable" : false,
-          "required" : false,
-          "array" : false,
-          "internalType" : "String"
-        }, {
-          "attributeType" : "Internal",
-          "name" : "AssetID",
+          "description" : "ISO Telemetry Timestamp",
           "nullable" : false,
           "required" : false,
           "array" : false,
@@ -126,30 +131,6 @@
         "executeMode" : "V4",
         "initExpression" : "",
         "attributes" : [ {
-          "name" : "SolidFlow",
-          "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Ball Mill Discharge Solid Flow\"];"
-          }
-        }, {
-          "name" : "BPL",
-          "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Ball Mill Discharge BPL\"];"
-          }
-        }, {
-          "name" : "P80",
-          "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Ball Mill Discharge P80\"];\n"
-          }
-        }, {
-          "name" : "Timestamp",
-          "expression" : {
-            "type" : "JavaScript",
-            "expression" : "return input[\"MinIO_Raw_DataLake\"][\"Grinding_Circuit_CSV_Input\"][0][\"Timestamp\"];"
-          }
-        }, {
           "name" : "AssetID",
           "expression" : {
             "type" : "Reference",
@@ -158,6 +139,54 @@
             }
           },
           "defaultValue" : "BM_001"
+        }, {
+          "name" : "SolidFlow",
+          "expression" : {
+            "type" : "Reference",
+            "reference" : {
+              "type" : "Input",
+              "name" : "",
+              "path" : "",
+              "params" : { },
+              "connectionName" : ""
+            }
+          }
+        }, {
+          "name" : "BPL",
+          "expression" : {
+            "type" : "Reference",
+            "reference" : {
+              "type" : "Input",
+              "name" : "",
+              "path" : "",
+              "params" : { },
+              "connectionName" : ""
+            }
+          }
+        }, {
+          "name" : "P80",
+          "expression" : {
+            "type" : "Reference",
+            "reference" : {
+              "type" : "Input",
+              "name" : "",
+              "path" : "",
+              "params" : { },
+              "connectionName" : ""
+            }
+          }
+        }, {
+          "name" : "Timestamp",
+          "expression" : {
+            "type" : "Reference",
+            "reference" : {
+              "type" : "Input",
+              "name" : "",
+              "path" : "",
+              "params" : { },
+              "connectionName" : ""
+            }
+          }
         } ],
         "parameters" : {
           "type" : "EmptyParameters"

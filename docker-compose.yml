@@ -132,6 +132,23 @@ services:
       exit 0;
       "
 
+  # =========================================================================
+  # 5. Mosquitto MQTT Broker (Unified Namespace / UNS Messaging)
+  # =========================================================================
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto_broker
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9002:9002"
+    volumes:
+      - ./volumes/mosquitto/config:/mosquitto/config
+      - ./volumes/mosquitto/data:/mosquitto/data
+      - ./volumes/mosquitto/log:/mosquitto/log
+    networks:
+      - digital_twin_network
+
 # =========================================================================
 # Custom Docker Bridge Network & Named Volumes
 # =========================================================================
