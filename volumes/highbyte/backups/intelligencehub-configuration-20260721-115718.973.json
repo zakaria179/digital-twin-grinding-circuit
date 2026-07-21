@@ -1,0 +1,91 @@
+{
+  "productInfo" : {
+    "company" : "HighByte",
+    "product" : "IntelligenceHub",
+    "version" : "4.4.4",
+    "build" : "2026.7.17.1",
+    "stage" : "Release"
+  },
+  "project" : {
+    "version" : 13,
+    "connections" : [ {
+      "name" : "MinIO_Raw_DataLake",
+      "uri" : "aws.s3://MinIO_Raw_DataLake",
+      "groupAs" : "/DataLake",
+      "description" : "S3 Connection to MinIO Data Lake Landing Zone",
+      "tags" : [ ],
+      "writes" : {
+        "flattenModeledValues" : false
+      },
+      "writeThrottle" : {
+        "enabled" : false,
+        "maxBatchSizePerTarget" : 1000,
+        "batchDelay" : {
+          "duration" : 20,
+          "units" : "Milliseconds"
+        }
+      },
+      "subscriptions" : { },
+      "storeForward" : {
+        "enabled" : false,
+        "maxEntries" : 100,
+        "waitOnFailureInterval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        }
+      },
+      "settings" : {
+        "authentication" : {
+          "type" : "TOKEN",
+          "accessKey" : "minioadmin",
+          "password" : {
+            "type" : "Encrypted",
+            "value" : {
+              "keyId" : "ohDaZ2SszWPkXxtXV07Zjg==",
+              "iv" : "trK3DS4lqe6Ipfv+7Rh1Pw==",
+              "ciphertext" : "NHiI4oWELYjklntfbPOvwQ=="
+            }
+          }
+        },
+        "region" : "us-east-1",
+        "endpoint" : "http://minio:9000",
+        "pathStyleAccess" : true
+      }
+    } ],
+    "inputs" : [ {
+      "name" : "Grinding_Circuit_CSV_Input",
+      "connection" : "MinIO_Raw_DataLake",
+      "type" : "aws.s3",
+      "qualifier" : {
+        "type" : "read",
+        "encoding" : "UTF_8",
+        "includeMetadata" : false,
+        "bucketName" : "raw-data-lake",
+        "key" : "Dynamic Results.CSV"
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      },
+      "template" : {
+        "type" : "Off"
+      },
+      "parameters" : {
+        "type" : "EmptyParameters"
+      }
+    } ],
+    "outputs" : [ ],
+    "modeling" : {
+      "models" : [ ],
+      "instances" : [ ]
+    },
+    "conditions" : [ ],
+    "functions" : [ ],
+    "tags" : [ ],
+    "pipelines" : [ ],
+    "namespace" : [ ]
+  },
+  "network" : {
+    "groups" : [ ],
+    "hubs" : [ ]
+  }
+}

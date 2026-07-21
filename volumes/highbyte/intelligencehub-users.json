@@ -1,0 +1,38 @@
+{
+  "productInfo" : {
+    "company" : "HighByte",
+    "product" : "IntelligenceHub",
+    "version" : "4.4.4",
+    "build" : "2026.7.17.1",
+    "stage" : "Release"
+  },
+  "roles" : [ {
+    "name" : "admin",
+    "policyVersion" : 1,
+    "claims" : [ {
+      "resources" : [ "*" ],
+      "actions" : [ "*" ]
+    } ]
+  }, {
+    "name" : "default",
+    "policyVersion" : 1,
+    "claims" : [ {
+      "resources" : [ "*" ],
+      "actions" : [ "read" ]
+    }, {
+      "resources" : [ "connection", "instance", "pipeline" ],
+      "actions" : [ "*" ]
+    } ]
+  } ],
+  "users" : [ {
+    "name" : "administrator",
+    "credentials" : {
+      "salt" : "kq/gSjRwqox+obqVNQtzKw==",
+      "hashedPassword" : "ExPX+I9y/LS/FgB85L4K3/pafp4WYUHL+Np3YucH2p+DQq0fEq24uFBl4KMng/iftSdyNIVBKIoy3qQ5HlNE0w=="
+    },
+    "policyVersion" : 1,
+    "claims" : [ ],
+    "roles" : [ "admin" ]
+  } ],
+  "apiKeys" : [ ]
+}

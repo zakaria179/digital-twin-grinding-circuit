@@ -1,0 +1,145 @@
+services:
+  # =========================================================================
+  # 1. Inductive Automation Ignition (2D Visualization & SCADA Gateway)
+  # =========================================================================
+  ignition:
+    image: inductiveautomation/ignition:8.1.38
+    container_name: ignition_gateway
+    restart: unless-stopped
+    environment:
+      - ACCEPT_IGNITION_EULA=Y
+      - GATEWAY_ADMIN_USERNAME=${IGNITION_ADMIN_USER}
+      - GATEWAY_ADMIN_PASSWORD=${IGNITION_ADMIN_PASSWORD}
+      - IGNITION_EDITION=${IGNITION_EDITION}
+    ports:
+      - "${IGNITION_HTTP_PORT}:8088"
+      - "${IGNITION_HTTPS_PORT}:8043"
+    volumes:
+      - ignition_data:/usr/local/bin/ignition/data
+    networks:
+      - digital_twin_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8088/StatusPing || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # =========================================================================
+  # 2. HighByte Intelligence Hub (Industrial DataOps & MQTT Integration)
+  # NOTE: HighByte distributes official images via .tar files (loaded via `docker load -i`).
+  # A local build context is included below with pull_policy: build as a fallback.
+  # =========================================================================
+  highbyte:
+    image: highbyte/intelligence-hub:latest
+    container_name: highbyte_hub
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - HIGHBYTE_ADMIN_PASSWORD=${HIGHBYTE_ADMIN_PASSWORD}
+    ports:
+      - "${HIGHBYTE_PORT}:45245"
+    volumes:
+      - ./volumes/highbyte:/usr/local/highbyte/appData
+    networks:
+      - digital_twin_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:45245/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
+
+  # =========================================================================
+  # 3. Eclipse BaSyx - Asset Administration Shell (AAS) Server & GUI
+  # =========================================================================
+  basyx-aas-server:
+    image: eclipsebasyx/aas-server:1.4.0
+    container_name: basyx_aas_server
+    restart: unless-stopped
+    ports:
+      - "${BASYX_AAS_SERVER_PORT}:4001"
+    volumes:
+      - ./volumes/basyx/aas-server:/workspace
+    networks:
+      - digital_twin_network
+
+  basyx-aas-gui:
+    image: eclipsebasyx/aas-gui:latest
+    container_name: basyx_aas_gui
+    restart: unless-stopped
+    environment:
+      - AAS_SERVER_PATH=http://basyx-aas-server:4001/aasServer
+    ports:
+      - "${BASYX_UI_PORT}:3000"
+    volumes:
+      - ./volumes/basyx/aas-gui:/usr/share/nginx/html/config
+    networks:
+      - digital_twin_network
+    depends_on:
+      - basyx-aas-server
+
+  # =========================================================================
+  # 4. MinIO Object Storage (Raw Data Lake Landing Zone)
+  # Architectural Rule: Raw data MUST land here before any processing.
+  # =========================================================================
+  minio:
+    image: minio/minio:RELEASE.2024-03-30T09-41-56Z
+    container_name: minio_raw_datalake
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_DOMAIN: minio
+    ports:
+      - "${MINIO_API_PORT}:9000"
+      - "${MINIO_CONSOLE_PORT}:9001"
+    volumes:
+      - ./volumes/minio/data:/data
+      - ./volumes/minio/config:/root/.minio
+    networks:
+      digital_twin_network:
+        aliases:
+          - minio
+          - raw-data-lake.minio
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/minio/health/live || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  # Initializer Service: Automatically provisions the Raw Data Lake Landing Zone Bucket
+  minio-init:
+    image: minio/mc:latest
+    container_name: minio_datalake_init
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - digital_twin_network
+    entrypoint: >
+      /bin/sh -c "
+      echo 'Waiting for MinIO server to accept connections...';
+      until mc alias set myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; do
+        sleep 2;
+      done;
+      echo 'Creating raw data lake landing zone bucket: ${MINIO_RAW_BUCKET}...';
+      mc mb --ignore-existing myminio/${MINIO_RAW_BUCKET};
+      mc anonymous set download myminio/${MINIO_RAW_BUCKET};
+      echo 'Raw Data Lake Landing Zone successfully provisioned!';
+      exit 0;
+      "
+
+# =========================================================================
+# Custom Docker Bridge Network & Named Volumes
+# =========================================================================
+networks:
+  digital_twin_network:
+    name: digital_twin_network
+    driver: bridge
+
+volumes:
+  ignition_data:
+    name: ignition_data

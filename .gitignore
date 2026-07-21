@@ -1,0 +1,27 @@
+# Environment variable secrets
+.env
+
+# Docker Volume persistent runtime data
+volumes/minio/data/*
+!volumes/minio/data/.gitkeep
+volumes/minio/config/*
+!volumes/minio/config/.gitkeep
+volumes/ignition/*
+!volumes/ignition/.gitkeep
+volumes/basyx/aas-server/*
+!volumes/basyx/aas-server/.gitkeep
+volumes/basyx/aas-gui/*
+!volumes/basyx/aas-gui/.gitkeep
+
+# HighByte runtime state and generated logs
+volumes/highbyte/*.db
+volumes/highbyte/*.dat
+volumes/highbyte/*.pkcs12
+volumes/highbyte/*.log
+volumes/highbyte/hd_*
+volumes/highbyte/hs_*
+
+# OS & Scratch files
+.DS_Store
+*.tmp
+*.log
